@@ -109,6 +109,37 @@ public class CRUD {
 
         return true;
     }
+    public void borrarAtributoPiloto() {
+        // Solicitar al usuario el nombre del piloto
+        IO.println("Ingrese el nombre del piloto:");
+        String nombrePiloto = IO.readString();
+
+        // Buscar el piloto por nombre
+        Document filtro = new Document("nombre", nombrePiloto);
+        Document piloto = collPilotos.find(filtro).first();
+
+        if (piloto != null) {
+            // Solicitar al usuario el nombre del atributo a borrar
+            IO.println("Ingrese el nombre del atributo que desea borrar:");
+            String atributo = IO.readString();
+
+            // Verificar si el atributo existe en el piloto
+            if (piloto.containsKey(atributo)) {
+                // Crear un documento de actualización para eliminar el atributo
+                Document updateDocument = new Document("$unset", new Document(atributo, ""));
+
+                // Aplicar la actualización al documento que coincide con el filtro
+                collPilotos.updateOne(filtro, updateDocument);
+
+                // Mensaje indicando que el atributo ha sido eliminado
+                IO.println("Atributo '" + atributo + "' eliminado del piloto '" + nombrePiloto + "'.");
+            } else {
+                IO.println("El atributo '" + atributo + "' no existe en el piloto '" + nombrePiloto + "'.");
+            }
+        } else {
+            IO.println("Piloto no encontrado.");
+        }
+    }
 
 
     public void buscarPorAtributoValor() {
@@ -201,55 +232,6 @@ public class CRUD {
         return true;
     }
 
-//    public void simularFindeSemana() {
-//        Random random = new Random();
-//        arrayPilotos = new ArrayList<>();
-//        collPilotos.find().into(arrayPilotos);
-//
-//        // Mezclar la lista de pilotos de manera aleatoria
-//        Collections.shuffle(arrayPilotos);
-//
-//        // Realizar clasificatoria
-//        List<Document> clasificados = new ArrayList<>(arrayPilotos);
-//        
-//        // Imprimir clasificación de la clasificatoria
-//        IO.println("\nResultado de la clasificación:");
-//        for (int i = 0; i < clasificados.size(); i++) {
-//            IO.println((i + 1) + ". " + clasificados.get(i).getString("nombre"));
-//        }
-//
-//        // Mezclar la lista de pilotos de manera aleatoria para la carrera
-//        Collections.shuffle(arrayPilotos);
-//
-//        // Simular carrera
-//        IO.println("\n¡Comienza la carrera!");
-//
-//        List<String> ordenLlegada = new ArrayList<>();
-//        List<String> abandonados = new ArrayList<>();
-//
-//        for (Document piloto : arrayPilotos) {
-//            double probabilidadAbandono = random.nextDouble() * piloto.getInteger("seguridad");
-//            if (probabilidadAbandono < 1) {
-//                abandonados.add(piloto.getString("nombre"));
-//                IO.println(piloto.getString("nombre") + " ha tenido un accidente y abandona la carrera.");
-//            } else {
-//                ordenLlegada.add(piloto.getString("nombre"));
-//                IO.println(piloto.getString("nombre") + " completa la carrera.");
-//            }
-//        }
-//
-//        // Imprimir orden de llegada
-//        IO.println("\nResultados del GP:");
-//        for (int i = 0; i < ordenLlegada.size(); i++) {
-//            IO.println((i + 1) + ". " + ordenLlegada.get(i));
-//        }
-//
-//        // Imprimir pilotos que abandonaron
-//        IO.println("\nPilotos que abandonaron:");
-//        for (String abandonado : abandonados) {
-//            IO.println(abandonado);
-//        }
-//    }
     public void simularFindeSemana() {
         Random random = new Random();
         arrayPilotos = new ArrayList<>();
@@ -332,7 +314,8 @@ public class CRUD {
         IO.println("4. Victoria");
         IO.println("5. Vuelta Rápida");
         IO.println("6. Palmarés");
-        IO.println("7. Agregar nuevo atributo y valor");
+        IO.println("7. Otro");
+        IO.println("8. Agregar nuevo atributo y valor");
 
         int opcion = IO.readInt();
         IO.readString();
@@ -359,6 +342,15 @@ public class CRUD {
                 modificarAtributo(piloto, "palmares", Arrays.asList(nuevoPalmares.split(",")));
                 break;
             case 7:
+            	IO.println("Ingrese el atributo que quieras cambiar:");
+            	IO.readString();
+            	String atributoCambio=IO.readString();
+                IO.println("Ingrese el nuevo valor:");
+                IO.readString();
+                String nuevoValorAtributo = IO.readString();
+                modificarAtributo(piloto, atributoCambio,nuevoValorAtributo);
+                break;
+            case 8:
                 IO.println("Ingrese el nombre del nuevo atributo:");
                 String nuevoAtributo = IO.readString();
                 IO.println("Ingrese el valor del nuevo atributo:");
@@ -392,4 +384,6 @@ public class CRUD {
 
         return null;
     }
+    
+    
 }

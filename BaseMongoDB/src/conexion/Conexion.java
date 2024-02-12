@@ -15,10 +15,9 @@ import com.mongodb.client.MongoDatabase;
 
 import model.Driver;
 
-
-
+/*mongodb+srv://danielrueda3012:Daniel30122003@cluster0.1r3y46l.mongodb.net/*/
 public class Conexion {
-	static String lineaConexionAtlas = "mongodb+srv://Fiiuns_10:ffunes12@cluster0.yllyof1.mongodb.net/test";
+	static String lineaConexionAtlas = "mongodb+srv://danielrueda3012:Daniel30122003@cluster0.1r3y46l.mongodb.net/";
 	  static CodecProvider pojoCodecProvider = null;
 	  static CodecRegistry pojoCodecRegistry = null;
 	  static MongoClient mclient = null;
